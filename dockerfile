@@ -36,16 +36,19 @@ FROM alpine:3.20
 RUN apk add --no-cache \
     libxslt libvorbis libogg libxml2 openssl mailcap ca-certificates
 
-RUN addgroup -S -g 568 icecast \
- && adduser  -S -D -H -u 568 -G icecast -s /sbin/nologin icecast \
+# Создание пользователя icecast с фиксированным UID/GID для совместимости с volume
+RUN addgroup -S -g 1000 icecast \
+ && adduser  -S -D -H -u 1000 -G icecast -s /sbin/nologin icecast \
  && mkdir -p /etc/icecast-kh /var/log/icecast-kh /run/icecast-kh \
- && chown -R 568:568 /var/log/icecast-kh /run/icecast-kh
+ && chown -R icecast:icecast /var/log/icecast-kh /run/icecast-kh \
+ && chmod 755 /var/log/icecast-kh
 
 COPY --from=builder /usr/bin/icecast   /usr/bin/icecast
 COPY --from=builder /usr/share/icecast /usr/share/icecast
 COPY files/icecast.xml.template /etc/icecast-kh/icecast.xml
 
 USER icecast:icecast
+VOLUME ["/var/log/icecast-kh"]
 EXPOSE 8000
 
 ENTRYPOINT ["icecast"]
