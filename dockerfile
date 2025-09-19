@@ -34,11 +34,12 @@ RUN curl -fsSL -o /usr/share/icecast/web/status-json.xsl \
 FROM alpine:3.20
 
 RUN apk add --no-cache \
-    libxslt libvorbis libogg libxml2 openssl mailcap ca-certificates
+    libxslt libvorbis libogg libxml2 openssl mailcap ca-certificates \
+    curl nano net-tools iputils-ping
 
-# Создание пользователя icecast с фиксированным UID/GID для совместимости с volume
-RUN addgroup -S -g 10000 icecast \
- && adduser  -S -D -H -u 10000 -G icecast -s /sbin/nologin icecast \
+# Создание пользователя icecast
+RUN addgroup -S icecast \
+ && adduser  -S -D -H -G icecast -s /sbin/nologin icecast \
  && mkdir -p /etc/icecast-kh /var/log/icecast-kh /run/icecast-kh \
  && chown -R icecast:icecast /var/log/icecast-kh /run/icecast-kh \
  && chmod 755 /var/log/icecast-kh
