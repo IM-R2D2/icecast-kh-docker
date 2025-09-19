@@ -36,10 +36,10 @@ FROM alpine:3.20
 RUN apk add --no-cache \
     libxslt libvorbis libogg libxml2 openssl mailcap ca-certificates
 
-RUN addgroup -g 999 icecast \
- && adduser -r -u 999 -g icecast -s /sbin/nologin icecast \
+RUN addgroup -S -g 568 icecast \
+ && adduser  -S -D -H -u 568 -G icecast -s /sbin/nologin icecast \
  && mkdir -p /etc/icecast-kh /var/log/icecast-kh /run/icecast-kh \
- && chown -R 999:999 /var/log/icecast-kh /run/icecast-kh
+ && chown -R 568:568 /var/log/icecast-kh /run/icecast-kh
 
 COPY --from=builder /usr/bin/icecast   /usr/bin/icecast
 COPY --from=builder /usr/share/icecast /usr/share/icecast
