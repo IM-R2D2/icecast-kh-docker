@@ -37,8 +37,8 @@ RUN apk add --no-cache \
     libxslt libvorbis libogg libxml2 openssl mailcap ca-certificates
 
 # Создание пользователя icecast с фиксированным UID/GID для совместимости с volume
-RUN addgroup -S -g 1000 icecast \
- && adduser  -S -D -H -u 1000 -G icecast -s /sbin/nologin icecast \
+RUN addgroup -S -g 10000 icecast \
+ && adduser  -S -D -H -u 10000 -G icecast -s /sbin/nologin icecast \
  && mkdir -p /etc/icecast-kh /var/log/icecast-kh /run/icecast-kh \
  && chown -R icecast:icecast /var/log/icecast-kh /run/icecast-kh \
  && chmod 755 /var/log/icecast-kh
